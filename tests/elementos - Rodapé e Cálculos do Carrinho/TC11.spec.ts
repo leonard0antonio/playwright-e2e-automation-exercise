@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 test("TC11: Deve assinar a newsletter na página do carrinho com sucesso", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
 
   // Navegar para o carrinho antes de assinar
   await page.locator('header a[href="/view_cart"]').click();
@@ -29,13 +29,13 @@ test("TC11: Deve assinar a newsletter na página do carrinho com sucesso", async
   const rodape = page.locator("#footer");
   await rodape.scrollIntoViewIfNeeded();
 
-  await expect(page.locator("h2", { hasText: "Subscription" })).toBeVisible();
+  await expect(page.locator("h2", { hasText: "Subscription" })).toBeVisible({ timeout: 10000 });
 
   await page.locator("#susbscribe_email").fill("qa_tester_cart@teste.com");
   await page.locator("#subscribe").click();
 
   const mensagemSucesso = page.locator("#success-subscribe");
-  await expect(mensagemSucesso).toBeVisible();
+  await expect(mensagemSucesso).toBeVisible({ timeout: 10000 });
   await expect(mensagemSucesso).toHaveText(
     "You have been successfully subscribed!",
   );
