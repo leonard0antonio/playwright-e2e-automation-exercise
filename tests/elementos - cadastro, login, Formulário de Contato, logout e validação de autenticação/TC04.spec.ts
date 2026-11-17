@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { registerNewUser, loginUser } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -20,17 +21,18 @@ test.beforeEach(async ({ page }) => {
 test("TC04: Deve fazer logout e voltar para a tela de login", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
-  await page.locator('a[href="/login"]').click();
+  await page.goto("/");
 
-  // Fazemos o login primeiro
-  await page
-    .locator('[data-qa="login-email"]')
-    .fill("qa_tester_valido@teste.com");
-  await page.locator('[data-qa="login-password"]').fill("SenhaForte123!");
-  await page.locator('[data-qa="login-button"]').click();
+  // Primeiro, registrar um novo usuário
+  const email = await registerNewUser(page);
 
-  await expect(page.locator("text=Logged in as")).toBeVisible();
+  // Fazer logout e login novamente para testar o fluxo completo
+  await page.locator('a[href="/logout"]').click();
+  await expect(page).toHaveURL(/.*login/);
+
+  // Login novamente
+  await loginUser(page, email);
+  await expect(page.locator("text=Logged in as")).toBeVisible({ timeout: 10000 });
 
   // Clicar no botão 'Logout'
   await page.locator('a[href="/logout"]').click();
