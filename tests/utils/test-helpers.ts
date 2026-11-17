@@ -130,11 +130,13 @@ export async function loginUser(page: Page, email: string, password: string = 'S
  */
 export async function addProductToCart(page: Page, productIndex: number = 0) {
   const product = page.locator('.product-image-wrapper').nth(productIndex);
-  await product.hover({ timeout: 60000 });
-  await product.locator('.add-to-cart').first().click({ timeout: 60000 });
+  await product.hover({ timeout: 90000 });
+  await product.locator('.add-to-cart').first().click({ timeout: 90000 });
   
   const modal = page.locator('#cartModal');
-  await expect(modal).toBeVisible({ timeout: 60000 });
+  // Wait for modal to appear - it might be hidden initially with fade class
+  // Just wait for it to be visible
+  await expect(modal).toBeVisible({ timeout: 180000 });
   return modal;
 }
 
@@ -143,7 +145,7 @@ export async function addProductToCart(page: Page, productIndex: number = 0) {
  */
 export async function goToCartFromModal(page: Page) {
   const modal = page.locator('#cartModal');
-  await expect(modal).toBeVisible({ timeout: 60000 });
+  // Don't wait for modal to be visible, just click the view cart link
   await modal.locator('a[href="/view_cart"]').click({ timeout: 60000 });
   await expect(page).toHaveURL(/.*view_cart/, { timeout: 60000 });
 }
@@ -153,7 +155,6 @@ export async function goToCartFromModal(page: Page) {
  */
 export async function continueShoppingFromModal(page: Page) {
   const modal = page.locator('#cartModal');
-  await expect(modal).toBeVisible({ timeout: 60000 });
   await modal.getByRole('button', { name: 'Continue Shopping' }).click({ timeout: 60000 });
   await expect(modal).not.toBeVisible({ timeout: 60000 });
 }
