@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 test("TC07: Deve acessar a página de Casos de Teste com sucesso", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
 
   // Clicar no botão 'Test Cases' no cabeçalho
   await page.locator('header a[href="/test_cases"]').click();
