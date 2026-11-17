@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { registerNewUser, addProductToCart, goToCartFromModal, proceedToCheckout, fillPaymentDetails, completePurchase, deleteAccount } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -20,62 +21,40 @@ test.beforeEach(async ({ page }) => {
 test("TC14: Deve adicionar ao carrinho, registrar no checkout e finalizar compra", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
 
   // 1. Adicionar produto ao carrinho e ir para o carrinho
-  await page.locator(".product-image-wrapper").first().hover();
-  await page.locator(".add-to-cart").first().click();
-  await page.locator('#cartModal a[href="/view_cart"]').click();
+  await addProductToCart(page, 0);
+  await goToCartFromModal(page);
 
   // 2. Tentar fazer Checkout (como não estamos logados, ele vai pedir)
-  await page.locator(".check_out").click();
+  await proceedToCheckout(page);
 
   // 3. Clicar em 'Register / Login' no modal que aparece
   await page.locator('#checkoutModal a[href="/login"]').click();
 
   // 4. Fluxo rápido de Cadastro (Usando e-mail dinâmico para não falhar)
-  const emailAleatorio = `qa_checkout_${Date.now()}@teste.com`;
-  await page.locator('[data-qa="signup-name"]').fill("QA Comprador");
-  await page.locator('[data-qa="signup-email"]').fill(emailAleatorio);
-  await page.locator('[data-qa="signup-button"]').click();
-
-  await page.locator("#id_gender1").check();
-  await page.locator('[data-qa="password"]').fill("SenhaForte123!");
-  await page.locator('[data-qa="first_name"]').fill("QA");
-  await page.locator('[data-qa="last_name"]').fill("Tester");
-  await page.locator('[data-qa="address"]').fill("Rua dos Bugs, 404");
-  await page.locator('[data-qa="country"]').selectOption("United States");
-  await page.locator('[data-qa="state"]').fill("CA");
-  await page.locator('[data-qa="city"]').fill("Los Angeles");
-  await page.locator('[data-qa="zipcode"]').fill("90001");
-  await page.locator('[data-qa="mobile_number"]').fill("5551234");
-  await page.locator('[data-qa="create-account"]').click();
-  await page.locator('[data-qa="continue-button"]').click(); // Voltar para a loja logado
+  await registerNewUser(page);
 
   // 5. Retornar ao carrinho e prosseguir para Checkout novamente
   await page.locator('header a[href="/view_cart"]').click();
-  await page.locator(".check_out").click();
+  await proceedToCheckout(page);
 
   // 6. Validar página de Checkout e adicionar comentário
   await expect(
     page.locator("h2", { hasText: "Address Details" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
   await page
     .locator('textarea[name="message"]')
     .fill("Entregar em horário comercial, por favor.");
   await page.locator('a[href="/payment"]').click();
 
   // 7. Preencher dados fictícios de Cartão de Crédito
-  await page.locator('[data-qa="name-on-card"]').fill("QA COMPRADOR");
-  await page.locator('[data-qa="card-number"]').fill("1234567890123456");
-  await page.locator('[data-qa="cvc"]').fill("123");
-  await page.locator('[data-qa="expiry-month"]').fill("12");
-  await page.locator('[data-qa="expiry-year"]').fill("2030");
+  await fillPaymentDetails(page);
 
   // 8. Confirmar Pagamento e Validar Sucesso
-  await page.locator('[data-qa="pay-button"]').click();
-  await expect(page.locator('[data-qa="order-placed"]')).toBeVisible();
-  await expect(page.locator('[data-qa="order-placed"]')).toHaveText(
-    "Order Placed!",
-  );
+  await completePurchase(page);
+
+  // Limpar a conta
+  await deleteAccount(page);
 });
