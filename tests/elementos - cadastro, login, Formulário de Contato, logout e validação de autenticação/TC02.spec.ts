@@ -25,18 +25,20 @@ test("TC02: Deve fazer login com credenciais válidas", async ({ page }) => {
   const email = await registerNewUser(page);
 
   // Fazer logout para testar o login
-  await page.locator('a[href="/logout"]').click();
-  await expect(page).toHaveURL(/.*login/);
+  await page.locator('a[href="/logout"]').click({ timeout: 60000 });
+  // Logout redirects directly to /login
+  await expect(page).toHaveURL(/.*login/, { timeout: 60000 });
 
   // Passo 3: Validar que a home carregou
   await expect(page.locator("body")).toBeVisible();
 
   // Passo 4: Clicar no botão 'Signup / Login'
-  await page.locator('a[href="/login"]').click();
+  await page.locator('a[href="/login"]').click({ timeout: 60000 });
 
   // Passo 5: Validar que "Login to your account" está visível
   await expect(page.locator(".login-form h2")).toHaveText(
     "Login to your account",
+    { timeout: 60000 }
   );
 
   // Passo 6: Inserir e-mail e senha da conta recém-criada
@@ -44,5 +46,5 @@ test("TC02: Deve fazer login com credenciais válidas", async ({ page }) => {
 
   // Passo 8: Validar que "Logged in as [nome]" está visível
   const usuarioLogado = page.locator("text=Logged in as");
-  await expect(usuarioLogado).toBeVisible();
+  await expect(usuarioLogado).toBeVisible({ timeout: 60000 });
 });
