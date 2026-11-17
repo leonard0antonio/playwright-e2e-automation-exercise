@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { registerNewUser } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -20,21 +21,25 @@ test.beforeEach(async ({ page }) => {
 test("TC05: Deve exibir erro ao tentar cadastrar e-mail já existente", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
   await page.locator('a[href="/login"]').click();
 
   await expect(page.locator(".signup-form h2")).toHaveText("New User Signup!");
 
-  // Inserir nome e um e-mail que já sabemos que existe no banco de dados deles
-  await page.locator('[data-qa="signup-name"]').fill("QA Tester");
-  await page
-    .locator('[data-qa="signup-email"]')
-    .fill("qa_tester_valido@teste.com");
+  // Primeiro, registrar um usuário
+  const email = await registerNewUser(page);
 
+  // Fazer logout
+  await page.locator('a[href="/logout"]').click();
+  await expect(page).toHaveURL(/.*login/);
+
+  // Tentar registrar com o mesmo e-mail
+  await page.locator('[data-qa="signup-name"]').fill("QA Tester");
+  await page.locator('[data-qa="signup-email"]').fill(email);
   await page.locator('[data-qa="signup-button"]').click();
 
   // Validar a mensagem de erro
   const mensagemErroSignup = page.locator(".signup-form p");
-  await expect(mensagemErroSignup).toBeVisible();
+  await expect(mensagemErroSignup).toBeVisible({ timeout: 10000 });
   await expect(mensagemErroSignup).toHaveText("Email Address already exist!");
 });
