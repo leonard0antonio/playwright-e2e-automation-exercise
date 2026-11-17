@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { goToCartFromModal } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -15,10 +16,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 // =========================================================
-  // TEST CASE 13: Alterar Quantidade do Produto
-  // =========================================================
-  test('TC13: Deve alterar a quantidade na página de detalhes e validar no carrinho', async ({ page }) => {
-    await page.goto('https://automationexercise.com/');
+// TEST CASE 13: Alterar Quantidade do Produto
+// =========================================================
+test('TC13: Deve alterar a quantidade na página de detalhes e validar no carrinho', async ({ page }) => {
+    await page.goto('/');
     
     // Clicar em "View Product" no primeiro produto da home
     await page.locator('.choose a').first().click();
@@ -34,9 +35,7 @@ test.beforeEach(async ({ page }) => {
     await page.locator('button.cart').click();
 
     // Ir para o carrinho através do modal
-    const modal = page.locator('#cartModal');
-    await expect(modal).toBeVisible();
-    await modal.locator('a[href="/view_cart"]').click();
+    await goToCartFromModal(page);
 
     // Validar se o selo de quantidade no carrinho exibe exatamente '4'
     const quantidadeNoCarrinho = page.locator('.cart_quantity button');
