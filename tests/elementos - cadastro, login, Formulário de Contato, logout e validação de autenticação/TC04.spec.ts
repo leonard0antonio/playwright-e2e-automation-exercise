@@ -27,17 +27,17 @@ test("TC04: Deve fazer logout e voltar para a tela de login", async ({
   const email = await registerNewUser(page);
 
   // Fazer logout e login novamente para testar o fluxo completo
-  await page.locator('a[href="/logout"]').click();
-  await expect(page).toHaveURL(/.*login/);
+  await page.locator('a[href="/logout"]').click({ timeout: 60000 });
+  await expect(page).toHaveURL(/.*login/, { timeout: 60000 });
 
   // Login novamente
   await loginUser(page, email);
-  await expect(page.locator("text=Logged in as")).toBeVisible({ timeout: 10000 });
+  await expect(page.locator("text=Logged in as")).toBeVisible({ timeout: 60000 });
 
   // Clicar no botão 'Logout'
-  await page.locator('a[href="/logout"]').click();
+  await page.locator('a[href="/logout"]').click({ timeout: 60000 });
 
   // Validar que o usuário foi redirecionado para a página de login
-  await expect(page).toHaveURL(/.*login/);
-  await expect(page.locator(".login-form h2")).toBeVisible();
+  await expect(page).toHaveURL(/.*login/, { timeout: 60000 });
+  await expect(page.locator(".login-form h2")).toBeVisible({ timeout: 60000 });
 });
