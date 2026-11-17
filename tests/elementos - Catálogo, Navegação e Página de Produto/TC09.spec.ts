@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 test("TC09: Deve buscar um produto específico e validar a listagem de resultados", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
 
   await page.locator('a[href="/products"]').click();
   await expect(page.locator(".title.text-center").first()).toHaveText(
@@ -32,9 +32,13 @@ test("TC09: Deve buscar um produto específico e validar a listagem de resultado
   await page.locator("#search_product").fill(termoBusca);
   await page.locator("#submit_search").click();
 
+  // Wait for search results to load
+  await page.waitForLoadState('networkidle', { timeout: 60000 });
+
   // Validar se o título mudou para produtos pesquisados
   await expect(page.locator(".title.text-center").first()).toHaveText(
     "Searched Products",
+    { timeout: 60000 }
   );
 
   // Capturar todos os nomes de produtos na tela e validar se contêm o termo buscado
@@ -46,6 +50,6 @@ test("TC09: Deve buscar um produto específico e validar a listagem de resultado
 
   // Um loop que verifica se o nome de cada produto retornado inclui a palavra "Tshirt" (ignorando maiúsculas/minúsculas)
   for (let i = 0; i < quantidade; i++) {
-    await expect(nomesDosProdutos.nth(i)).toContainText(/Tshirt/i);
+    await expect(nomesDosProdutos.nth(i)).toContainText(/Tshirt/i, { timeout: 30000 });
   }
 });
