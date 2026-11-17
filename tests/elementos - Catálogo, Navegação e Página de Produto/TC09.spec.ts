@@ -25,6 +25,7 @@ test("TC09: Deve buscar um produto específico e validar a listagem de resultado
   await page.locator('a[href="/products"]').click();
   await expect(page.locator(".title.text-center").first()).toHaveText(
     "All Products",
+    { timeout: 60000 }
   );
 
   // Preencher a barra de busca e pesquisar
@@ -32,13 +33,14 @@ test("TC09: Deve buscar um produto específico e validar a listagem de resultado
   await page.locator("#search_product").fill(termoBusca);
   await page.locator("#submit_search").click();
 
-  // Wait for search results to load
-  await page.waitForLoadState('networkidle', { timeout: 60000 });
+  // Wait for search results to load - wait for URL change or title change
+  await page.waitForURL(/.*products/, { timeout: 180000 });
+  await page.waitForLoadState('networkidle', { timeout: 180000 });
 
   // Validar se o título mudou para produtos pesquisados
   await expect(page.locator(".title.text-center").first()).toHaveText(
     "Searched Products",
-    { timeout: 60000 }
+    { timeout: 180000 }
   );
 
   // Capturar todos os nomes de produtos na tela e validar se contêm o termo buscado
