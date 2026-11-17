@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { registerNewUser, loginUser } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -18,7 +19,14 @@ test.beforeEach(async ({ page }) => {
 // TEST CASE 2: Login com e-mail e senha corretos
 // =========================================================
 test("TC02: Deve fazer login com credenciais válidas", async ({ page }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
+
+  // Primeiro, registrar um novo usuário para garantir que existe
+  const email = await registerNewUser(page);
+
+  // Fazer logout para testar o login
+  await page.locator('a[href="/logout"]').click();
+  await expect(page).toHaveURL(/.*login/);
 
   // Passo 3: Validar que a home carregou
   await expect(page.locator("body")).toBeVisible();
@@ -31,15 +39,8 @@ test("TC02: Deve fazer login com credenciais válidas", async ({ page }) => {
     "Login to your account",
   );
 
-  // Passo 6: Inserir e-mail e senha (use uma conta previamente criada)
-  // Nota: Em um projeto real, criaríamos essa conta via API antes do teste
-  await page
-    .locator('[data-qa="login-email"]')
-    .fill("qa_tester_valido@teste.com");
-  await page.locator('[data-qa="login-password"]').fill("SenhaForte123!");
-
-  // Passo 7: Clicar em 'login'
-  await page.locator('[data-qa="login-button"]').click();
+  // Passo 6: Inserir e-mail e senha da conta recém-criada
+  await loginUser(page, email);
 
   // Passo 8: Validar que "Logged in as [nome]" está visível
   const usuarioLogado = page.locator("text=Logged in as");
