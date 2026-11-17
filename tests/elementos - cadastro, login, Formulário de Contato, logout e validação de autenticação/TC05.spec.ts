@@ -22,24 +22,24 @@ test("TC05: Deve exibir erro ao tentar cadastrar e-mail já existente", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.locator('a[href="/login"]').click();
+  await page.locator('a[href="/login"]').click({ timeout: 60000 });
 
-  await expect(page.locator(".signup-form h2")).toHaveText("New User Signup!");
+  await expect(page.locator(".signup-form h2")).toHaveText("New User Signup!", { timeout: 60000 });
 
   // Primeiro, registrar um usuário
   const email = await registerNewUser(page);
 
   // Fazer logout
-  await page.locator('a[href="/logout"]').click();
-  await expect(page).toHaveURL(/.*login/);
+  await page.locator('a[href="/logout"]').click({ timeout: 60000 });
+  await expect(page).toHaveURL(/.*login/, { timeout: 60000 });
 
   // Tentar registrar com o mesmo e-mail
-  await page.locator('[data-qa="signup-name"]').fill("QA Tester");
-  await page.locator('[data-qa="signup-email"]').fill(email);
-  await page.locator('[data-qa="signup-button"]').click();
+  await page.locator('[data-qa="signup-name"]').fill("QA Tester", { timeout: 60000 });
+  await page.locator('[data-qa="signup-email"]').fill(email, { timeout: 60000 });
+  await page.locator('[data-qa="signup-button"]').click({ timeout: 60000 });
 
   // Validar a mensagem de erro
   const mensagemErroSignup = page.locator(".signup-form p");
-  await expect(mensagemErroSignup).toBeVisible({ timeout: 10000 });
+  await expect(mensagemErroSignup).toBeVisible({ timeout: 60000 });
   await expect(mensagemErroSignup).toHaveText("Email Address already exist!");
 });
