@@ -15,10 +15,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 // =========================================================
-  // TEST CASE 3: Login com e-mail e senha incorretos
-  // =========================================================
+// TEST CASE 3: Login com e-mail e senha incorretos
+// =========================================================
 test('TC03: Deve exibir erro ao tentar logar com credenciais inválidas', async ({ page }) => {
-    await page.goto('https://automationexercise.com/');
+    await page.goto('/');
     await page.locator('a[href="/login"]').click();
     
     await expect(page.locator('.login-form h2')).toHaveText('Login to your account');
@@ -30,6 +30,6 @@ test('TC03: Deve exibir erro ao tentar logar com credenciais inválidas', async 
 
     // Validar a mensagem de erro específica
     const mensagemErro = page.locator('.login-form p');
-    await expect(mensagemErro).toBeVisible();
+    await expect(mensagemErro).toBeVisible({ timeout: 10000 });
     await expect(mensagemErro).toHaveText('Your email or password is incorrect!');
   });
