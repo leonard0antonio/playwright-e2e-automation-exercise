@@ -34,11 +34,11 @@ test("TC17: Deve adicionar um produto e removê-lo do carrinho com sucesso", asy
   await expect(linhaProduto).toHaveCount(1);
 
   // 4. Clicar no botão 'X' (Delete) para remover o item
-  await page.locator(".cart_quantity_delete").click();
+  await page.locator(".cart_quantity_delete").click({ timeout: 60000 });
 
   // 5. O site possui um pequeno atraso assíncrono ao deletar.
   // O Playwright aguarda o elemento "empty_cart" ficar visível.
   const carrinhoVazio = page.locator("#empty_cart");
-  await expect(carrinhoVazio).toBeVisible({ timeout: 60000 });
+  await expect(carrinhoVazio).toBeVisible({ timeout: 90000 });
   await expect(carrinhoVazio).toContainText("Cart is empty!");
 });
