@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 test("TC08: Deve validar a lista de produtos e as informações detalhadas do primeiro item", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
 
   // Acessar a página de produtos
   await page.locator('a[href="/products"]').click();
@@ -33,7 +33,7 @@ test("TC08: Deve validar a lista de produtos e as informações detalhadas do pr
 
   // Garantir que a lista de produtos (grid) está visível
   const listaProdutos = page.locator(".features_items");
-  await expect(listaProdutos).toBeVisible();
+  await expect(listaProdutos).toBeVisible({ timeout: 10000 });
 
   // Clicar no botão 'View Product' do primeiro item da lista
   await page.locator(".choose a").first().click();
@@ -43,18 +43,18 @@ test("TC08: Deve validar a lista de produtos e as informações detalhadas do pr
 
   // Validar a presença de todas as informações obrigatórias do produto
   const informacoesProduto = page.locator(".product-information");
-  await expect(informacoesProduto.locator("h2")).toBeVisible(); // Nome do Produto
+  await expect(informacoesProduto.locator("h2")).toBeVisible({ timeout: 10000 }); // Nome do Produto
   await expect(
     informacoesProduto.locator("p").filter({ hasText: "Category" }),
-  ).toBeVisible();
-  await expect(informacoesProduto.locator("span span")).toBeVisible(); // Preço
+  ).toBeVisible({ timeout: 10000 });
+  await expect(informacoesProduto.locator("span span")).toBeVisible({ timeout: 10000 }); // Preço
   await expect(
     informacoesProduto.locator("p").filter({ hasText: "Availability:" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
   await expect(
     informacoesProduto.locator("p").filter({ hasText: "Condition:" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
   await expect(
     informacoesProduto.locator("p").filter({ hasText: "Brand:" }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
 });
