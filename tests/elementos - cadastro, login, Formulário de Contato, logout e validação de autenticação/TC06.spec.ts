@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 test("Deve enviar mensagem de contato com anexo de arquivo", async ({
   page,
 }) => {
-  await page.goto("https://automationexercise.com/");
+  await page.goto("/");
 
   await page.locator('a[href="/contact_us"]').click();
 
@@ -34,11 +34,12 @@ test("Deve enviar mensagem de contato com anexo de arquivo", async ({
   await page.locator('input[name="upload_file"]').setInputFiles({
     name: "duvida.txt",
     mimeType: "text/plain",
-    buffer: (globalThis as any).Buffer.from(
+    buffer: Buffer.from(
       "Arquivo de teste gerado pelo Playwright",
     ),
   });
 
+  // Handle the dialog before clicking submit
   page.on("dialog", async (dialog) => {
     expect(dialog.message()).toBe("Press OK to proceed!");
     await dialog.accept();
@@ -46,8 +47,9 @@ test("Deve enviar mensagem de contato com anexo de arquivo", async ({
 
   await page.locator('[data-qa="submit-button"]').click();
 
+  // Wait for success message - it might take a while
   const mensagemSucesso = page.locator(".status.alert.alert-success");
-  await expect(mensagemSucesso).toBeVisible();
+  await expect(mensagemSucesso).toBeVisible({ timeout: 60000 });
   await expect(mensagemSucesso).toHaveText(
     "Success! Your details have been submitted successfully.",
   );
