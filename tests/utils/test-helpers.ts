@@ -154,6 +154,7 @@ export async function goToCartFromModal(page: Page) {
  */
 export async function continueShoppingFromModal(page: Page) {
   const modal = page.locator('#cartModal');
+  await expect(modal).toBeVisible({ timeout: 180000 });
   await modal.getByRole('button', { name: 'Continue Shopping' }).click({ timeout: 120000 });
   await expect(modal).not.toBeVisible({ timeout: 120000 });
 }
