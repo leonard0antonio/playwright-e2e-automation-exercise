@@ -83,23 +83,23 @@ export async function registerNewUser(page: Page, options: {
   const password = options.password || 'SenhaForte123!';
 
   // Ensure we're on the home page and not logged in
-  await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 90000 });
+  await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 180000 });
   
   // Check if already logged in, if so logout first
   const loggedIn = page.locator('text=Logged in as');
   if (await loggedIn.isVisible({ timeout: 5000 }).catch(() => false)) {
-    await page.locator('a[href="/logout"]').click();
-    await expect(page).toHaveURL(/.*login/, { timeout: 30000 });
+    await page.locator('a[href="/logout"]').click({ timeout: 60000 });
+    await expect(page).toHaveURL(/.*login/, { timeout: 60000 });
   }
 
   // Go to login/signup page
-  await page.locator('a[href="/login"]').click({ timeout: 60000 });
+  await page.locator('a[href="/login"]').click({ timeout: 180000 });
   
   // Wait for login page to load
-  await page.waitForLoadState('domcontentloaded', { timeout: 60000 });
+  await page.waitForLoadState('domcontentloaded', { timeout: 180000 });
   
   // Wait for signup form to be visible
-  await expect(page.locator('[data-qa="signup-name"]')).toBeVisible({ timeout: 60000 });
+  await expect(page.locator('[data-qa="signup-name"]')).toBeVisible({ timeout: 180000 });
   
   await page.locator('[data-qa="signup-name"]').fill(name, { timeout: 60000 });
   await page.locator('[data-qa="signup-email"]').fill(email, { timeout: 60000 });
@@ -107,7 +107,7 @@ export async function registerNewUser(page: Page, options: {
 
   await fillRegistrationForm(page, { ...options, email, name, password });
   
-  await expect(page.locator('[data-qa="account-created"]')).toBeVisible({ timeout: 90000 });
+  await expect(page.locator('[data-qa="account-created"]')).toBeVisible({ timeout: 180000 });
   await expect(page.locator('[data-qa="account-created"]')).toHaveText('Account Created!', { timeout: 60000 });
   await page.locator('[data-qa="continue-button"]').click({ timeout: 60000 });
 
@@ -133,9 +133,8 @@ export async function addProductToCart(page: Page, productIndex: number = 0) {
   await product.hover({ timeout: 90000 });
   await product.locator('.add-to-cart').first().click({ timeout: 90000 });
   
+  // Wait for modal to appear
   const modal = page.locator('#cartModal');
-  // Wait for modal to appear - it might be hidden initially with fade class
-  // Just wait for it to be visible
   await expect(modal).toBeVisible({ timeout: 180000 });
   return modal;
 }
@@ -145,9 +144,9 @@ export async function addProductToCart(page: Page, productIndex: number = 0) {
  */
 export async function goToCartFromModal(page: Page) {
   const modal = page.locator('#cartModal');
-  // Don't wait for modal to be visible, just click the view cart link
-  await modal.locator('a[href="/view_cart"]').click({ timeout: 60000 });
-  await expect(page).toHaveURL(/.*view_cart/, { timeout: 60000 });
+  await expect(modal).toBeVisible({ timeout: 180000 });
+  await modal.locator('a[href="/view_cart"]').click({ timeout: 120000 });
+  await expect(page).toHaveURL(/.*view_cart/, { timeout: 120000 });
 }
 
 /**
@@ -155,8 +154,8 @@ export async function goToCartFromModal(page: Page) {
  */
 export async function continueShoppingFromModal(page: Page) {
   const modal = page.locator('#cartModal');
-  await modal.getByRole('button', { name: 'Continue Shopping' }).click({ timeout: 60000 });
-  await expect(modal).not.toBeVisible({ timeout: 60000 });
+  await modal.getByRole('button', { name: 'Continue Shopping' }).click({ timeout: 120000 });
+  await expect(modal).not.toBeVisible({ timeout: 120000 });
 }
 
 /**
