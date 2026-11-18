@@ -129,13 +129,23 @@ export async function loginUser(page: Page, email: string, password: string = 'S
  * Adds a product to cart from product listing
  */
 export async function addProductToCart(page: Page, productIndex: number = 0) {
-  const product = page.locator('.product-image-wrapper').nth(productIndex);
-  await product.hover({ timeout: 90000 });
-  await product.locator('.add-to-cart').first().click({ timeout: 90000 });
-  
-  // Wait for modal to appear
   const modal = page.locator('#cartModal');
-  await expect(modal).toBeVisible({ timeout: 180000 });
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const product = page.locator('.product-image-wrapper').nth(productIndex);
+    await product.hover({ timeout: 60000 });
+    await product.locator('.add-to-cart').first().click({ timeout: 60000 });
+
+    const modalOpened = await modal.isVisible({ timeout: 30000 }).catch(() => false);
+    if (modalOpened) {
+      await expect(modal).toBeVisible({ timeout: 60000 });
+      return modal;
+    }
+
+    await page.waitForTimeout(1000);
+  }
+
+  await expect(modal).toBeVisible({ timeout: 60000 });
   return modal;
 }
 
