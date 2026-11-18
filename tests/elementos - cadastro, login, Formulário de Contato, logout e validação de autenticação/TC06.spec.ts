@@ -51,9 +51,11 @@ test("Deve enviar mensagem de contato com anexo de arquivo", async ({
   // The success message appears in a div that might be hidden initially
   await page.waitForLoadState('networkidle', { timeout: 180000 });
   
-  const mensagemSucesso = page.locator(".status.alert.alert-success");
+  // Use the specific selector for contact form success message
+  // The success message might be in different elements
+  const mensagemSucesso = page.locator(".status.alert.alert-success, .alert-success.alert, #contact-page .status");
   // Check if it has text content instead of visibility
-  await expect(mensagemSucesso).toHaveText(
+  await expect(mensagemSucesso.first()).toHaveText(
     "Success! Your details have been submitted successfully.",
     { timeout: 180000 }
   );
