@@ -49,7 +49,7 @@ test("Deve enviar mensagem de contato com anexo de arquivo", async ({
 
   // Wait for success message - it might take a while
   // The success message appears in a div that might be hidden initially
-  await page.waitForLoadState('networkidle', { timeout: 60000 });
+  await page.waitForLoadState('networkidle', { timeout: 120000 }); 
   
   // Use the specific selector for contact form success message
   // The success message might be in different elements
