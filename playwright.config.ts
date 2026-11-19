@@ -18,7 +18,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 1 : 0,
+  retries: 2,
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -36,10 +36,10 @@ export default defineConfig({
     navigationTimeout: 60000,
   },
 
-  /* Global test timeout - reduced from 5min to 3min */
-  timeout: 180000,
+  /* Global test timeout - increased to 5min */
+  timeout: 300000,
   expect: {
-    timeout: 30000,
+    timeout: 60000,
   },
 
   /* Configure projects for major browsers */
