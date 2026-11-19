@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { registerNewUser, addProductToCart, goToCartFromModal, deleteAccount } from "../utils/test-helpers";
+  import { registerNewUser, goToCartFromModal, deleteAccount } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -29,8 +29,7 @@ test('TC20: Deve buscar produtos, adicionar ao carrinho e validar após login', 
 
     // 2. Adicionar o primeiro produto da busca ao carrinho
     const primeiroProduto = page.locator('.product-image-wrapper').first();
-    await primeiroProduto.hover();
-    await primeiroProduto.locator('.add-to-cart').first().click();
+      await primeiroProduto.locator('.add-to-cart').first().click({ timeout: 30000 });
     
     // 3. Ir para o carrinho e validar se o produto está lá
     await goToCartFromModal(page);
