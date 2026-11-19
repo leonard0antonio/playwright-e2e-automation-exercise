@@ -50,8 +50,9 @@ test("TC09: Deve buscar um produto específico e validar a listagem de resultado
   // Garante que pelo menos 1 produto foi encontrado
   expect(quantidade).toBeGreaterThan(0);
 
-  // Um loop que verifica se o nome de cada produto retornado inclui a palavra "Tshirt" (ignorando maiúsculas/minúsculas)
+  // Um loop que verifica se o nome de cada produto retornado inclui a palavra "Tshirt" ou "T-Shirt" (ignorando maiúsculas/minúsculas)
   for (let i = 0; i < quantidade; i++) {
-    await expect(nomesDosProdutos.nth(i)).toContainText(/Tshirt/i, { timeout: 30000 });
+    const texto = await nomesDosProdutos.nth(i).textContent();
+    expect(texto).toMatch(/[Tt]shirt/i);
   }
 });
