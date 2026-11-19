@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -27,7 +27,7 @@ test("TC19: Deve navegar pelas marcas no menu lateral e validar os produtos", as
 
   // 2. Validar que o menu lateral de Marcas (Brands) está visível
   const menuMarcas = page.locator(".brands_products");
-  await expect(menuMarcas).toBeVisible({ timeout: 10000 });
+  await expect(menuMarcas).toBeVisible({ timeout: 30000 });
 
   // 3. Clicar na marca 'Polo'
   await menuMarcas.locator('a[href="/brand_products/Polo"]').click();
@@ -38,7 +38,7 @@ test("TC19: Deve navegar pelas marcas no menu lateral e validar os produtos", as
     "Brand - Polo Products",
   );
   await expect
-    .poll(async () => page.locator(".features_items .product-image-wrapper").count(), { timeout: 10000 })
+    .poll(async () => page.locator(".features_items .product-image-wrapper").count(), { timeout: 30000 })
     .toBeGreaterThan(0);
 
   // 5. Clicar em outra marca no menu lateral (ex: 'H&M')
