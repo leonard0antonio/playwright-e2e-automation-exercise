@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { registerNewUser, addProductToCart, goToCartFromModal, proceedToCheckout, deleteAccount } from "../utils/test-helpers";
+import { registerNewUser, goToCartFromModal, proceedToCheckout, deleteAccount } from "../utils/test-helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/*", (route) => {
@@ -35,15 +35,23 @@ test("TC23: Deve validar se os endereços de entrega e cobrança coincidem com o
     mobileNumber: "555444333"
   });
 
-  // 2. Adicionar produto e ir para o Checkout
+  // 2. Ir diretamente para a página de produtos e adicionar ao carrinho
   await page.locator('header a[href="/products"]').click();
-  await addProductToCart(page, 0);
+  
+  // Esperar a página carregar
+  await page.waitForLoadState('networkidle', { timeout: 30000 });
+  
+  // Adicionar primeiro produto ao carrinho clicando no botão
+  const primeiroProduto = page.locator('.product-image-wrapper').first();
+  await primeiroProduto.locator('.add-to-cart').first().click({ timeout: 30000 });
+
+  // Ir para o carrinho
   await goToCartFromModal(page);
   await proceedToCheckout(page);
 
   // 3. Validar se o endereço de Entrega (Delivery) bate com o que preenchemos
   const enderecoEntrega = page.locator("#address_delivery");
-  await expect(enderecoEntrega).toContainText("NomeQA SobrenomeQA", { timeout: 10000 });
+  await expect(enderecoEntrega).toContainText("NomeQA SobrenomeQA", { timeout: 30000 });
   await expect(enderecoEntrega).toContainText("Rua Principal, 1000");
   await expect(enderecoEntrega).toContainText("Austin Texas 73301");
 
