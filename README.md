@@ -116,17 +116,19 @@ No [playwright.config.ts](playwright.config.ts):
 - Projetos: Chromium, Firefox e WebKit
 - Base URL: `https://automationexercise.com`
 - Execucao local: 1 worker
-- Retries locais: 1
-- Retries no CI: 2
+- Retries locais: 0
+- Retries no CI: 1
 - Trace: coletado na primeira tentativa com falha
-- Timeout geral: 300 segundos
-- Timeout de expect: 60 segundos
-- Timeout de navegacao: 180 segundos
-- Timeout de acoes: 120 segundos
+- Timeout geral: 180 segundos
+- Timeout de expect: 30 segundos
+- Timeout de navegacao: 60 segundos
+- Timeout de acoes: 30 segundos
 
 O HTML report eh gerado automaticamente em `playwright-report/`. Os artefatos `test-results/` e `playwright-report/` nao sao versionados.
 
 Os testes bloqueiam dominios de propaganda no `beforeEach` para reduzir instabilidade e tempo de execucao.
+
+**Nota:** No CI, os testes são executados apenas no projeto Chromium para reduzir o tempo total de execução.
 
 ## Helpers reutilizaveis
 

@@ -44,22 +44,22 @@ export async function fillRegistrationForm(page: Page, options: {
     mobileNumber = '+1 555 0199'
   } = options;
 
-  await page.locator('#id_gender1').check({ timeout: 60000 });
-  await page.locator('[data-qa="password"]').fill(password, { timeout: 60000 });
-  await page.locator('[data-qa="days"]').selectOption('15', { timeout: 60000 });
-  await page.locator('[data-qa="months"]').selectOption('5', { timeout: 60000 });
-  await page.locator('[data-qa="years"]').selectOption('1990', { timeout: 60000 });
-  await page.locator('#newsletter').check({ timeout: 60000 });
-  await page.locator('#optin').check({ timeout: 60000 });
-  await page.locator('[data-qa="first_name"]').fill(firstName, { timeout: 60000 });
-  await page.locator('[data-qa="last_name"]').fill(lastName, { timeout: 60000 });
-  await page.locator('[data-qa="address"]').fill(address, { timeout: 60000 });
-  await page.locator('[data-qa="country"]').selectOption(country, { timeout: 60000 });
-  await page.locator('[data-qa="state"]').fill(state, { timeout: 60000 });
-  await page.locator('[data-qa="city"]').fill(city, { timeout: 60000 });
-  await page.locator('[data-qa="zipcode"]').fill(zipcode, { timeout: 60000 });
-  await page.locator('[data-qa="mobile_number"]').fill(mobileNumber, { timeout: 60000 });
-  await page.locator('[data-qa="create-account"]').click({ timeout: 60000 });
+  await page.locator('#id_gender1').check({ timeout: 30000 });
+  await page.locator('[data-qa="password"]').fill(password, { timeout: 30000 });
+  await page.locator('[data-qa="days"]').selectOption('15', { timeout: 30000 });
+  await page.locator('[data-qa="months"]').selectOption('5', { timeout: 30000 });
+  await page.locator('[data-qa="years"]').selectOption('1990', { timeout: 30000 });
+  await page.locator('#newsletter').check({ timeout: 30000 });
+  await page.locator('#optin').check({ timeout: 30000 });
+  await page.locator('[data-qa="first_name"]').fill(firstName, { timeout: 30000 });
+  await page.locator('[data-qa="last_name"]').fill(lastName, { timeout: 30000 });
+  await page.locator('[data-qa="address"]').fill(address, { timeout: 30000 });
+  await page.locator('[data-qa="country"]').selectOption(country, { timeout: 30000 });
+  await page.locator('[data-qa="state"]').fill(state, { timeout: 30000 });
+  await page.locator('[data-qa="city"]').fill(city, { timeout: 30000 });
+  await page.locator('[data-qa="zipcode"]').fill(zipcode, { timeout: 30000 });
+  await page.locator('[data-qa="mobile_number"]').fill(mobileNumber, { timeout: 30000 });
+  await page.locator('[data-qa="create-account"]').click({ timeout: 30000 });
 }
 
 /**
@@ -83,33 +83,33 @@ export async function registerNewUser(page: Page, options: {
   const password = options.password || 'SenhaForte123!';
 
   // Ensure we're on the home page and not logged in
-  await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 180000 });
+  await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 });
   
   // Check if already logged in, if so logout first
   const loggedIn = page.locator('text=Logged in as');
   if (await loggedIn.isVisible({ timeout: 5000 }).catch(() => false)) {
-    await page.locator('a[href="/logout"]').click({ timeout: 60000 });
-    await expect(page).toHaveURL(/.*login/, { timeout: 60000 });
+    await page.locator('a[href="/logout"]').click({ timeout: 30000 });
+    await expect(page).toHaveURL(/.*login/, { timeout: 30000 });
   }
 
   // Go to login/signup page
-  await page.locator('a[href="/login"]').click({ timeout: 180000 });
+  await page.locator('a[href="/login"]').click({ timeout: 60000 });
   
   // Wait for login page to load
-  await page.waitForLoadState('domcontentloaded', { timeout: 180000 });
+  await page.waitForLoadState('domcontentloaded', { timeout: 60000 });
   
   // Wait for signup form to be visible
-  await expect(page.locator('[data-qa="signup-name"]')).toBeVisible({ timeout: 180000 });
+  await expect(page.locator('[data-qa="signup-name"]')).toBeVisible({ timeout: 60000 });
   
-  await page.locator('[data-qa="signup-name"]').fill(name, { timeout: 60000 });
-  await page.locator('[data-qa="signup-email"]').fill(email, { timeout: 60000 });
-  await page.locator('[data-qa="signup-button"]').click({ timeout: 60000 });
+  await page.locator('[data-qa="signup-name"]').fill(name, { timeout: 30000 });
+  await page.locator('[data-qa="signup-email"]').fill(email, { timeout: 30000 });
+  await page.locator('[data-qa="signup-button"]').click({ timeout: 30000 });
 
   await fillRegistrationForm(page, { ...options, email, name, password });
   
-  await expect(page.locator('[data-qa="account-created"]')).toBeVisible({ timeout: 180000 });
-  await expect(page.locator('[data-qa="account-created"]')).toHaveText('Account Created!', { timeout: 60000 });
-  await page.locator('[data-qa="continue-button"]').click({ timeout: 60000 });
+  await expect(page.locator('[data-qa="account-created"]')).toBeVisible({ timeout: 60000 });
+  await expect(page.locator('[data-qa="account-created"]')).toHaveText('Account Created!', { timeout: 30000 });
+  await page.locator('[data-qa="continue-button"]').click({ timeout: 30000 });
 
   return email;
 }
@@ -118,11 +118,11 @@ export async function registerNewUser(page: Page, options: {
  * Logs in with existing credentials
  */
 export async function loginUser(page: Page, email: string, password: string = 'SenhaForte123!') {
-  await expect(page.locator('[data-qa="login-email"]')).toBeVisible({ timeout: 60000 });
-  await page.locator('[data-qa="login-email"]').fill(email, { timeout: 60000 });
-  await page.locator('[data-qa="login-password"]').fill(password, { timeout: 60000 });
-  await page.locator('[data-qa="login-button"]').click({ timeout: 60000 });
-  await expect(page.locator('text=Logged in as')).toBeVisible({ timeout: 90000 });
+  await expect(page.locator('[data-qa="login-email"]')).toBeVisible({ timeout: 30000 });
+  await page.locator('[data-qa="login-email"]').fill(email, { timeout: 30000 });
+  await page.locator('[data-qa="login-password"]').fill(password, { timeout: 30000 });
+  await page.locator('[data-qa="login-button"]').click({ timeout: 30000 });
+  await expect(page.locator('text=Logged in as')).toBeVisible({ timeout: 60000 });
 }
 
 /**
@@ -133,19 +133,19 @@ export async function addProductToCart(page: Page, productIndex: number = 0) {
 
   for (let attempt = 0; attempt < 2; attempt++) {
     const product = page.locator('.product-image-wrapper').nth(productIndex);
-    await product.hover({ timeout: 60000 });
-    await product.locator('.add-to-cart').first().click({ timeout: 60000 });
+    await product.hover({ timeout: 30000 });
+    await product.locator('.add-to-cart').first().click({ timeout: 30000 });
 
-    const modalOpened = await modal.isVisible({ timeout: 30000 }).catch(() => false);
+    const modalOpened = await modal.isVisible({ timeout: 15000 }).catch(() => false);
     if (modalOpened) {
-      await expect(modal).toBeVisible({ timeout: 60000 });
+      await expect(modal).toBeVisible({ timeout: 30000 });
       return modal;
     }
 
     await page.waitForTimeout(1000);
   }
 
-  await expect(modal).toBeVisible({ timeout: 60000 });
+  await expect(modal).toBeVisible({ timeout: 30000 });
   return modal;
 }
 
@@ -154,9 +154,9 @@ export async function addProductToCart(page: Page, productIndex: number = 0) {
  */
 export async function goToCartFromModal(page: Page) {
   const modal = page.locator('#cartModal');
-  await expect(modal).toBeVisible({ timeout: 180000 });
-  await modal.locator('a[href="/view_cart"]').click({ timeout: 120000 });
-  await expect(page).toHaveURL(/.*view_cart/, { timeout: 120000 });
+  await expect(modal).toBeVisible({ timeout: 60000 });
+  await modal.locator('a[href="/view_cart"]').click({ timeout: 30000 });
+  await expect(page).toHaveURL(/.*view_cart/, { timeout: 30000 });
 }
 
 /**
@@ -164,16 +164,16 @@ export async function goToCartFromModal(page: Page) {
  */
 export async function continueShoppingFromModal(page: Page) {
   const modal = page.locator('#cartModal');
-  await expect(modal).toBeVisible({ timeout: 180000 });
-  await modal.getByRole('button', { name: 'Continue Shopping' }).click({ timeout: 120000 });
-  await expect(modal).not.toBeVisible({ timeout: 120000 });
+  await expect(modal).toBeVisible({ timeout: 60000 });
+  await modal.getByRole('button', { name: 'Continue Shopping' }).click({ timeout: 30000 });
+  await expect(modal).not.toBeVisible({ timeout: 30000 });
 }
 
 /**
  * Proceeds to checkout from cart page
  */
 export async function proceedToCheckout(page: Page) {
-  await page.locator('.check_out').click({ timeout: 60000 });
+  await page.locator('.check_out').click({ timeout: 30000 });
 }
 
 /**
@@ -194,43 +194,43 @@ export async function fillPaymentDetails(page: Page, options: {
     expiryYear = '2030'
   } = options;
 
-  await page.locator('[data-qa="name-on-card"]').fill(nameOnCard, { timeout: 60000 });
-  await page.locator('[data-qa="card-number"]').fill(cardNumber, { timeout: 60000 });
-  await page.locator('[data-qa="cvc"]').fill(cvc, { timeout: 60000 });
-  await page.locator('[data-qa="expiry-month"]').fill(expiryMonth, { timeout: 60000 });
-  await page.locator('[data-qa="expiry-year"]').fill(expiryYear, { timeout: 60000 });
+  await page.locator('[data-qa="name-on-card"]').fill(nameOnCard, { timeout: 30000 });
+  await page.locator('[data-qa="card-number"]').fill(cardNumber, { timeout: 30000 });
+  await page.locator('[data-qa="cvc"]').fill(cvc, { timeout: 30000 });
+  await page.locator('[data-qa="expiry-month"]').fill(expiryMonth, { timeout: 30000 });
+  await page.locator('[data-qa="expiry-year"]').fill(expiryYear, { timeout: 30000 });
 }
 
 /**
  * Completes the purchase
  */
 export async function completePurchase(page: Page) {
-  await page.locator('[data-qa="pay-button"]').click({ timeout: 60000 });
-  await expect(page.locator('[data-qa="order-placed"]')).toBeVisible({ timeout: 90000 });
-  await expect(page.locator('[data-qa="order-placed"]')).toHaveText('Order Placed!', { timeout: 60000 });
+  await page.locator('[data-qa="pay-button"]').click({ timeout: 30000 });
+  await expect(page.locator('[data-qa="order-placed"]')).toBeVisible({ timeout: 60000 });
+  await expect(page.locator('[data-qa="order-placed"]')).toHaveText('Order Placed!', { timeout: 30000 });
 }
 
 /**
  * Deletes the current user account
  */
 export async function deleteAccount(page: Page) {
-  await page.locator('header a[href="/delete_account"]').click({ timeout: 60000 });
-  await expect(page.locator('[data-qa="account-deleted"]')).toBeVisible({ timeout: 60000 });
-  await expect(page.locator('[data-qa="account-deleted"]')).toHaveText('Account Deleted!', { timeout: 60000 });
+  await page.locator('header a[href="/delete_account"]').click({ timeout: 30000 });
+  await expect(page.locator('[data-qa="account-deleted"]')).toBeVisible({ timeout: 30000 });
+  await expect(page.locator('[data-qa="account-deleted"]')).toHaveText('Account Deleted!', { timeout: 30000 });
 }
 
 /**
  * Waits for page to be fully loaded
  */
 export async function waitForPageLoad(page: Page) {
-  await page.waitForLoadState('networkidle', { timeout: 90000 });
-  await page.waitForLoadState('domcontentloaded', { timeout: 60000 });
+  await page.waitForLoadState('networkidle', { timeout: 60000 });
+  await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
 }
 
 /**
  * Scrolls to element and waits for it to be visible
  */
 export async function scrollToElement(page: Page, locator: Locator) {
-  await locator.scrollIntoViewIfNeeded({ timeout: 60000 });
-  await expect(locator).toBeVisible({ timeout: 60000 });
+  await locator.scrollIntoViewIfNeeded({ timeout: 30000 });
+  await expect(locator).toBeVisible({ timeout: 30000 });
 }
