@@ -1,25 +1,38 @@
 # Playwright E2E Automation Exercise
 
-Suíte de testes end-to-end (E2E) com [Playwright](https://playwright.dev/) sobre o site de prática [Automation Exercise](https://automationexercise.com/), cobrindo cadastro, login, validação de autenticação, logout, formulário de contato, navegação do catálogo, newsletter, cálculos do carrinho e jornada de compra/checkout.
+Suite de testes end-to-end (E2E) com [Playwright](https://playwright.dev/) para o site de pratica [Automation Exercise](https://automationexercise.com/).
 
-## 📋 Pré-requisitos
+A cobertura inclui cadastro e autenticacao, catalogo e busca, carrinho, checkout, newsletter, categorias, marcas, avaliacoes, download da fatura e navegacao pela pagina.
 
-- [Node.js](https://nodejs.org/) LTS (recomendado v20+; desenvolvido com v24)
-- npm (vem junto com o Node.js)
+## Tecnologias
 
-## 🚀 Instalação
+- Node.js e npm
+- Playwright Test
+- TypeScript
+- GitHub Actions
+
+## Pre-requisitos
+
+- [Node.js](https://nodejs.org/) versao LTS
+- npm
+
+## Instalacao
 
 ```bash
 npm ci
 npx playwright install --with-deps
 ```
 
-O segundo comando baixa os navegadores (Chromium, Firefox e WebKit) usados pelos testes.
-
-## ▶️ Executando os testes
+No Windows, o segundo comando pode ser executado sem `--with-deps` caso as dependencias do sistema ja estejam instaladas:
 
 ```bash
-# Todos os testes, todos os navegadores
+npx playwright install
+```
+
+## Executando os testes
+
+```bash
+# Todos os testes nos tres navegadores
 npx playwright test
 
 # Apenas um navegador
@@ -27,110 +40,134 @@ npx playwright test --project=chromium
 npx playwright test --project=firefox
 npx playwright test --project=webkit
 
-# Um único arquivo de teste
+# Apenas um arquivo
 npx playwright test "tests/elementos - cadastro, login, Formulário de Contato, logout e validação de autenticação/TC01.spec.ts"
 
-# Modo debug (abre o Playwright Inspector)
+# Apenas um caso pelo titulo
+npx playwright test -g "TC24"
+
+# Modo debug
 npx playwright test --debug
 
-# Modo UI interativo
+# Interface interativa
 npx playwright test --ui
-```
 
-Após a execução, o relatório HTML é aberto automaticamente (configurado com `reporter: 'html'` em [playwright.config.ts](playwright.config.ts)). Para reabrir depois:
-
-```bash
+# Reabrir o ultimo relatorio HTML
 npx playwright show-report
 ```
 
-## 🧪 Casos de teste
+## Casos de teste
 
-| Arquivo | Caso de teste | Descrição |
+| TC | Arquivo | Cenário |
 | --- | --- | --- |
-| [TC01.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formulário%20de%20Contato,%20logout%20e%20validação%20de%20autenticação/TC01.spec.ts) | TC01 | Cadastro completo de novo usuário com sucesso |
-| [TC02.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formulário%20de%20Contato,%20logout%20e%20validação%20de%20autenticação/TC02.spec.ts) | TC02 | Login com credenciais válidas |
-| [TC03.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formulário%20de%20Contato,%20logout%20e%20validação%20de%20autenticação/TC03.spec.ts) | TC03 | Exibe erro ao logar com credenciais inválidas |
-| [TC04.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formulário%20de%20Contato,%20logout%20e%20validação%20de%20autenticação/TC04.spec.ts) | TC04 | Logout retorna para a tela de login |
-| [TC05.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formulário%20de%20Contato,%20logout%20e%20validação%20de%20autenticação/TC05.spec.ts) | TC05 | Exibe erro ao cadastrar e-mail já existente |
-| [TC06.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formulário%20de%20Contato,%20logout%20e%20validação%20de%20autenticação/TC06.spec.ts) | TC06 | Formulário de contato com anexo de arquivo |
-| [TC07.spec.ts](tests/elementos%20-%20Catálogo,%20Navegação%20e%20Página%20de%20Produto/TC07.spec.ts) | TC07 | Acessa a página de Casos de Teste (navegação/catálogo) |
-| [TC08.spec.ts](tests/elementos%20-%20Catálogo,%20Navegação%20e%20Página%20de%20Produto/TC08.spec.ts) | TC08 | Valida a lista de produtos e os detalhes do primeiro item |
-| [TC09.spec.ts](tests/elementos%20-%20Catálogo,%20Navegação%20e%20Página%20de%20Produto/TC09.spec.ts) | TC09 | Busca um produto ("Tshirt") e valida os resultados |
-| [TC10.spec.ts](tests/elementos%20-%20Rodapé%20e%20Cálculos%20do%20Carrinho/TC10.spec.ts) | TC10 | Assina a newsletter na página inicial |
-| [TC11.spec.ts](tests/elementos%20-%20Rodapé%20e%20Cálculos%20do%20Carrinho/TC11.spec.ts) | TC11 | Assina a newsletter na página do carrinho |
-| [TC12.spec.ts](tests/elementos%20-%20Rodapé%20e%20Cálculos%20do%20Carrinho/TC12.spec.ts) | TC12 | Adiciona dois produtos e valida preço, quantidade e total no carrinho |
-| [TC13.spec.ts](tests/elementos%20-%20Jornada%20de%20Compra%20e%20Checkout/TC13.spec.ts) | TC13 | Altera a quantidade do produto e valida no carrinho |
-| [TC14.spec.ts](tests/elementos%20-%20Jornada%20de%20Compra%20e%20Checkout/TC14.spec.ts) | TC14 | Registra a conta durante o checkout e finaliza a compra |
-| [TC15.spec.ts](tests/elementos%20-%20Jornada%20de%20Compra%20e%20Checkout/TC15.spec.ts) | TC15 | Registra antes do checkout, finaliza a compra e exclui a conta |
+| TC01 | [TC01.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formul%C3%A1rio%20de%20Contato,%20logout%20e%20valida%C3%A7%C3%A3o%20de%20autentica%C3%A7%C3%A3o/TC01.spec.ts) | Registrar um novo usuario com sucesso |
+| TC02 | [TC02.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formul%C3%A1rio%20de%20Contato,%20logout%20e%20valida%C3%A7%C3%A3o%20de%20autentica%C3%A7%C3%A3o/TC02.spec.ts) | Fazer login com credenciais validas |
+| TC03 | [TC03.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formul%C3%A1rio%20de%20Contato,%20logout%20e%20valida%C3%A7%C3%A3o%20de%20autentica%C3%A7%C3%A3o/TC03.spec.ts) | Exibir erro com credenciais invalidas |
+| TC04 | [TC04.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formul%C3%A1rio%20de%20Contato,%20logout%20e%20valida%C3%A7%C3%A3o%20de%20autentica%C3%A7%C3%A3o/TC04.spec.ts) | Fazer logout e retornar ao login |
+| TC05 | [TC05.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formul%C3%A1rio%20de%20Contato,%20logout%20e%20valida%C3%A7%C3%A3o%20de%20autentica%C3%A7%C3%A3o/TC05.spec.ts) | Exibir erro ao cadastrar um e-mail existente |
+| TC06 | [TC06.spec.ts](tests/elementos%20-%20cadastro,%20login,%20Formul%C3%A1rio%20de%20Contato,%20logout%20e%20valida%C3%A7%C3%A3o%20de%20autentica%C3%A7%C3%A3o/TC06.spec.ts) | Enviar formulario de contato com anexo |
+| TC07 | [TC07.spec.ts](tests/elementos%20-%20Cat%C3%A1logo,%20Navega%C3%A7%C3%A3o%20e%20P%C3%A1gina%20de%20Produto/TC07.spec.ts) | Acessar a pagina de Casos de Teste |
+| TC08 | [TC08.spec.ts](tests/elementos%20-%20Cat%C3%A1logo,%20Navega%C3%A7%C3%A3o%20e%20P%C3%A1gina%20de%20Produto/TC08.spec.ts) | Validar a lista e os detalhes do primeiro produto |
+| TC09 | [TC09.spec.ts](tests/elementos%20-%20Cat%C3%A1logo,%20Navega%C3%A7%C3%A3o%20e%20P%C3%A1gina%20de%20Produto/TC09.spec.ts) | Buscar um produto e validar os resultados |
+| TC10 | [TC10.spec.ts](tests/elementos%20-%20Rodap%C3%A9%20e%20C%C3%A1lculos%20do%20Carrinho/TC10.spec.ts) | Assinar a newsletter na pagina inicial |
+| TC11 | [TC11.spec.ts](tests/elementos%20-%20Rodap%C3%A9%20e%20C%C3%A1lculos%20do%20Carrinho/TC11.spec.ts) | Assinar a newsletter na pagina do carrinho |
+| TC12 | [TC12.spec.ts](tests/elementos%20-%20Rodap%C3%A9%20e%20C%C3%A1lculos%20do%20Carrinho/TC12.spec.ts) | Validar preco, quantidade e total de dois produtos |
+| TC13 | [TC13.spec.ts](tests/elementos%20-%20Jornada%20de%20Compra%20e%20Checkout/TC13.spec.ts) | Alterar quantidade e validar no carrinho |
+| TC14 | [TC14.spec.ts](tests/elementos%20-%20Jornada%20de%20Compra%20e%20Checkout/TC14.spec.ts) | Registrar conta no checkout e finalizar compra |
+| TC15 | [TC15.spec.ts](tests/elementos%20-%20Jornada%20de%20Compra%20e%20Checkout/TC15.spec.ts) | Registrar antes do checkout, comprar e excluir conta |
+| TC16 | [TC16.spec.ts](tests/elementos%20-%20Login,%20Exclus%C3%A3o%20e%20Categorias/TC16.spec.ts) | Logar, comprar e excluir a conta |
+| TC17 | [TC17.spec.ts](tests/elementos%20-%20Login,%20Exclus%C3%A3o%20e%20Categorias/TC17.spec.ts) | Remover um produto do carrinho |
+| TC18 | [TC18.spec.ts](tests/elementos%20-%20Login,%20Exclus%C3%A3o%20e%20Categorias/TC18.spec.ts) | Navegar pelas categorias e validar produtos |
+| TC19 | [TC19.spec.ts](tests/elementos%20-%20navega%C3%A7%C3%A3o%20por%20marcas%20na%20barra%20lateral,%20a%20persist%C3%AAncia%20de%20dados%20no%20carrinho%20ap%C3%B3s%20o%20login%20e%20o%20preenchimento%20de%20formul%C3%A1rios%20de%20avalia%C3%A7%C3%A3o/TC19.spec.ts) | Navegar pelas marcas no menu lateral |
+| TC20 | [TC20.spec.ts](tests/elementos%20-%20navega%C3%A7%C3%A3o%20por%20marcas%20na%20barra%20lateral,%20a%20persist%C3%AAncia%20de%20dados%20no%20carrinho%20ap%C3%B3s%20o%20login%20e%20o%20preenchimento%20de%20formul%C3%A1rios%20de%20avalia%C3%A7%C3%A3o/TC20.spec.ts) | Validar o carrinho apos busca e login |
+| TC21 | [TC21.spec.ts](tests/elementos%20-%20navega%C3%A7%C3%A3o%20por%20marcas%20na%20barra%20lateral,%20a%20persist%C3%AAncia%20de%20dados%20no%20carrinho%20ap%C3%B3s%20o%20login%20e%20o%20preenchimento%20de%20formul%C3%A1rios%20de%20avalia%C3%A7%C3%A3o/TC21.spec.ts) | Preencher e enviar avaliacao de produto |
+| TC22 | [TC22.spec.ts](tests/elementos%20-%20Download%20de%20nota%20fiscal%20em%20e-commerce/TC22.spec.ts) | Adicionar um produto recomendado ao carrinho |
+| TC23 | [TC23.spec.ts](tests/elementos%20-%20Download%20de%20nota%20fiscal%20em%20e-commerce/TC23.spec.ts) | Validar endereco de entrega e cobranca |
+| TC24 | [TC24.spec.ts](tests/elementos%20-%20Download%20de%20nota%20fiscal%20em%20e-commerce/TC24.spec.ts) | Finalizar compra e validar o download da fatura |
+| TC25 | [TC25.spec.ts](tests/elementos%20-%20Bot%C3%A3o%20voltar%20ao%20topo%20e%20simula%C3%A7%C3%A3o%20de%20mouse%20e%20teclado/TC25.spec.ts) | Voltar ao topo usando o botao de seta |
+| TC26 | [TC26.spec.ts](tests/elementos%20-%20Bot%C3%A3o%20voltar%20ao%20topo%20e%20simula%C3%A7%C3%A3o%20de%20mouse%20e%20teclado/TC26.spec.ts) | Voltar ao topo simulando o scroll do mouse |
 
-> ⚠️ Os testes de login/logout/cadastro repetido (TC02, TC04, TC05) usam a conta fixa `qa_tester_valido@teste.com`. Em um projeto real, essa conta seria criada via API antes da suíte (ex.: em um `global setup`), evitando dependência de estado externo.
-
-## 🗂️ Estrutura do projeto
+## Estrutura do projeto
 
 ```text
 playwright-e2e-automation-exercise/
-├── .github/
-│   └── workflows/
-│       └── playwright.yml          # CI no GitHub Actions
+├── .github/workflows/playwright.yml
 ├── tests/
 │   ├── elementos - cadastro, login, Formulário de Contato, logout e validação de autenticação/
-│   │   ├── TC01.spec.ts            # Cadastro completo
-│   │   ├── TC02.spec.ts            # Login válido
-│   │   ├── TC03.spec.ts            # Login inválido
-│   │   ├── TC04.spec.ts            # Logout
-│   │   ├── TC05.spec.ts            # E-mail já cadastrado
-│   │   └── TC06.spec.ts            # Formulário de contato com anexo
 │   ├── elementos - Catálogo, Navegação e Página de Produto/
-│   │   ├── TC07.spec.ts            # Página de Test Cases
-│   │   ├── TC08.spec.ts            # Lista de produtos e detalhes do item
-│   │   └── TC09.spec.ts            # Busca de produto
 │   ├── elementos - Rodapé e Cálculos do Carrinho/
-│   │   ├── TC10.spec.ts            # Newsletter na home
-│   │   ├── TC11.spec.ts            # Newsletter no carrinho
-│   │   └── TC12.spec.ts            # Dois produtos: preço, quantidade e total
-│   └── elementos - Jornada de Compra e Checkout/
-│       ├── TC13.spec.ts            # Quantidade alterada e validada no carrinho
-│       ├── TC14.spec.ts            # Cadastro durante o checkout + compra
-│       └── TC15.spec.ts            # Cadastro antes + compra + exclusão da conta
-├── .gitignore                      # node_modules, relatórios e artefatos
+│   ├── elementos - Jornada de Compra e Checkout/
+│   ├── elementos - Login, Exclusão e Categorias/
+│   ├── elementos - navegação por marcas na barra lateral/
+│   ├── elementos - Download de nota fiscal em e-commerce/
+│   ├── elementos - Botão voltar ao topo e simulação de mouse e teclado/
+│   └── utils/test-helpers.ts
+├── .gitignore
 ├── package.json
 ├── package-lock.json
 ├── playwright.config.ts
 └── README.md
 ```
 
-## ⚙️ Configuração
+## Configuracao
 
-O arquivo [playwright.config.ts](playwright.config.ts) define:
+No [playwright.config.ts](playwright.config.ts):
 
-- **Projetos**: `chromium`, `firefox` e `webkit` (Desktop Chrome/Firefox/Safari)
-- **Execução paralela**: `fullyParallel: true` (arquivos rodam em paralelo localmente)
-- **CI**: `forbidOnly` ativo, `retries: 2` e `workers: 1` quando `CI=true`
-- **Relatório**: HTML (`reporter: 'html'`)
-- **Trace**: gravado na primeira retry (`trace: 'on-first-retry'`) — útil para depurar falhas no CI
+- Projetos: Chromium, Firefox e WebKit
+- Base URL: `https://automationexercise.com`
+- Execucao local: 1 worker
+- Retries locais: 1
+- Retries no CI: 2
+- Trace: coletado na primeira tentativa com falha
+- Timeout geral: 300 segundos
+- Timeout de expect: 60 segundos
+- Timeout de navegacao: 180 segundos
+- Timeout de acoes: 120 segundos
 
-Cada spec bloqueia requisições de propaganda (`googleads`, `doubleclick`, `googlesyndication`) via `page.route` no `beforeEach`, deixando os testes mais rápidos e estáveis.
+O HTML report eh gerado automaticamente em `playwright-report/`. Os artefatos `test-results/` e `playwright-report/` nao sao versionados.
 
-## 🤖 CI/CD (GitHub Actions)
+Os testes bloqueiam dominios de propaganda no `beforeEach` para reduzir instabilidade e tempo de execucao.
 
-O workflow [.github/workflows/playwright.yml](.github/workflows/playwright.yml) roda em todo `push`/`pull request` para `main`/`master`:
+## Helpers reutilizaveis
 
-1. Faz checkout e configura o Node.js (LTS)
-2. Instala dependências com `npm ci`
-3. Instala os navegadores Playwright (`npx playwright install --with-deps`)
-4. Executa `npx playwright test`
-5. Publica o relatório HTML como artefato (`playwright-report`, retido por 30 dias)
+O arquivo [test-helpers.ts](tests/utils/test-helpers.ts) centraliza operacoes usadas em mais de um teste:
 
-## 🔄 O que mudou / histórico recente
+- Geracao de e-mails e nomes unicos
+- Cadastro de usuario
+- Login e logout
+- Adicao e visualizacao de produtos no carrinho
+- Preenchimento e conclusao do pagamento
+- Exclusao da conta
+- Scroll ate elementos
 
-- **TC06 adicionado**: formulário de contato com upload de anexo (`setInputFiles` com buffer gerado em memória) e tratamento do diálogo de confirmação (`page.on("dialog")`).
-- **TC07 adicionado**: nova pasta `elementos - Catálogo, Navegação e Página de Produto` cobrindo navegação para a página de Test Cases.
-- **TC08–TC15 adicionados**: detalhes de produto e busca (TC08–TC09), newsletter na home e no carrinho (TC10–TC11), validação de preço/quantidade/total com dois produtos (TC12), alteração de quantidade (TC13) e jornadas de compra com cadastro durante ou antes do checkout (TC14–TC15, com exclusão da conta ao final no TC15).
-- **TC2.spec.ts → TC02.spec.ts**: o arquivo foi renomeado para padronizar a nomenclatura (zero à esquerda), mantendo o mesmo conteúdo do teste de login válido.
-- **Commits anteriores**: TC01–TC05, configuração inicial do Playwright (3 navegadores), `package.json`/`package-lock.json`, `.gitignore` e workflow de CI.
+## CI/CD
 
-## 📝 Convenções
+O workflow [.github/workflows/playwright.yml](.github/workflows/playwright.yml) executa a suite em todo `push` e `pull request` para `main` ou `master`:
 
-- Testes nomeados como `TCxx.spec.ts`, um cenário por arquivo.
-- Seletores baseados nos atributos `data-qa` fornecidos pelo site (mais estáveis que CSS/XPath).
-- E-mails de teste gerados com timestamp (`qa_tester_${Date.now()}@teste.com`) para evitar colisão no cadastro (TC01).
+1. Configura o Node.js LTS
+2. Instala as dependencias com `npm ci`
+3. Instala os navegadores Playwright
+4. Executa todos os projetos
+5. Publica `playwright-report/` como artefato por 30 dias
+
+## Relatorios e depuracao
+
+```bash
+# Executar novamente apenas um caso com falha
+npx playwright test -g "TC24" --project=chromium
+
+# Abrir o Playwright Inspector
+npx playwright test --debug
+
+# Visualizar o trace de uma tentativa com falha
+npx playwright show-trace
+```
+
+## Convencoes
+
+- Arquivos nomeados como `TCxx.spec.ts`
+- Um caso principal por arquivo
+- E-mails gerados dinamicamente para testes de cadastro
+- Seletores `data-qa` quando disponiveis
+- Helpers compartilhados em `tests/utils/test-helpers.ts`
+- Reportes e resultados temporarios ignorados pelo Git
