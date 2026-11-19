@@ -131,18 +131,16 @@ export async function loginUser(page: Page, email: string, password: string = 'S
 export async function addProductToCart(page: Page, productIndex: number = 0) {
   const modal = page.locator('#cartModal');
 
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const product = page.locator('.product-image-wrapper').nth(productIndex);
+  // Try direct click first (more reliable than hover)
+  const product = page.locator('.product-image-wrapper').nth(productIndex);
+  const addToCartBtn = product.locator('.add-to-cart').first();
+  
+  try {
+    await addToCartBtn.click({ timeout: 30000 });
+  } catch (e) {
+    // Fallback to hover if direct click doesn't work
     await product.hover({ timeout: 30000 });
-    await product.locator('.add-to-cart').first().click({ timeout: 30000 });
-
-    const modalOpened = await modal.isVisible({ timeout: 15000 }).catch(() => false);
-    if (modalOpened) {
-      await expect(modal).toBeVisible({ timeout: 30000 });
-      return modal;
-    }
-
-    await page.waitForTimeout(1000);
+    await addToCartBtn.click({ timeout: 30000 });
   }
 
   await expect(modal).toBeVisible({ timeout: 30000 });
